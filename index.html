@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFC PRO - Glass Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            /* 👇 SUBSTITUA PELO SEU LINK AQUI 👇 */
+            background: url('https://images.pexels.com/photos/4761779/pexels-photo-4761779.jpeg?auto=compress&cs=tinysrgb&w=1920') no-repeat center center fixed;
+            
+            background-size: cover;
+            min-height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+            margin: 0;
+            background-color: #000;
+        }
+
+        /* Máscara do fundo mais suave para mostrar mais a imagem */
+        .overlay {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.3), rgba(0,0,0,0.8));
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* 🔴 2. CONTROLE DA TRANSPARÊNCIA (MUITO MAIS VIDRO AGORA) */
+        .glass-card {
+            /* 0.4 = 40% visível (Bem transparente) */
+            background: rgba(0, 0, 0, 0.4); 
+            
+            /* Blur forte para garantir leitura do texto mesmo com fundo transparente */
+            backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px);
+            
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .font-ufc {
+            font-family: 'Anton', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Animação do Accordion */
+        .details-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease-out;
+            opacity: 0;
+        }
+
+        /* Quando ativo, abre */
+        .accordion-item.active .details-content,
+        .main-event-card.active .details-content {
+            max-height: 300px;
+            opacity: 1;
+            margin-top: 15px;
+            padding-bottom: 10px;
+        }
+
+        .arrow-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-item.active .arrow-icon,
+        .main-event-card.active .arrow-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay w-full">
+        <div class="w-full max-w-md">
+            
+            <header class="text-center mt-6 mb-10">
+                <h1 class="font-ufc text-6xl italic text-white leading-none drop-shadow-xl">
+                    UFC <span class="text-red-600">HOUSTON</span>
+                </h1>
+                <p class="text-white/80 font-bold tracking-[0.3em] text-[10px] mt-2 uppercase italic">Sábado • 21 de Fevereiro</p>
+            </header>
+
+            <div class="main-event-card glass-card rounded-3xl overflow-hidden mb-10 relative cursor-pointer transition-all hover:bg-black/50" onclick="toggleMain(this)">
+                <div class="absolute left-0 top-0 bottom-0 w-3 bg-red-600 shadow-[0_0_15px_rgba(220,38,38,0.6)]"></div>
+                
+                <div class="p-6 pl-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-[9px] font-bold text-white/70 tracking-widest uppercase">Main Event • 5 Rounds</span>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-green-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">Favorito (61%)</span>
+                            <div class="bg-white/10 p-1 rounded-full arrow-icon">
+                                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <h2 class="font-ufc text-2xl italic text-white/50 decoration-red-600 line-through decoration-2">Strickland</h2>
+                        <div class="text-red-600 font-black italic text-xl px-2">VS</div>
+                        <h2 class="font-ufc text-3xl italic text-green-400 drop-shadow-md">Hernandez</h2>
+                    </div>
+
+                    <div class="details-content">
+                        <div class="bg-black/40 p-4 rounded-xl border border-white/10 mt-4 backdrop-blur-sm">
+                            <p class="text-[11px] text-white/90 leading-relaxed italic">
+                                <strong class="text-green-400 uppercase font-bold block mb-1">Análise Técnica:</strong> 
+                                Hernandez deve explorar o volume recorde de quedas. Estatisticamente, quem controla o solo contra Sean vence 72% das vezes. A pressão será a chave.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-2 mb-4 ml-2">
+                <div class="h-[1px] w-8 bg-red-600 box-shadow-lg"></div>
+                <h3 class="font-ufc text-sm text-white/80 tracking-widest shadow-black drop-shadow-md">Outros Picks</h3>
+            </div>
+
+            <div class="space-y-3 pb-12">
+
+                <div class="accordion-item glass-card rounded-2xl p-4 cursor-pointer transition-all active:scale-95 hover:bg-white/5" onclick="toggleAccordion(this)">
+                    <div class="flex justify-between items-center">
+                        <div class="border-l-4 border-green-500 pl-3">
+                            <p class="text-[9px] text-green-400 font-bold mb-1 tracking-wider uppercase">Alta Confiança (82%)</p>
+                            <h4 class="font-ufc text-xl text-white italic">Punahele Soriano</h4>
+                        </div>
+                        <div class="bg-white/10 p-2 rounded-full arrow-icon">
+                            <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                    <div class="details-content">
+                        <div class="bg-black/40 p-3 rounded-xl border border-white/10 mt-2">
+                            <p class="text-[11px] text-white/80">
+                                Oponente tem defesa de golpes crítica (44%). Soriano tem +2.1 golpes/min de vantagem e poder de nocaute superior.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item glass-card rounded-2xl p-4 cursor-pointer transition-all active:scale-95 hover:bg-white/5" onclick="toggleAccordion(this)">
+                    <div class="flex justify-between items-center">
+                        <div class="border-l-4 border-green-500 pl-3">
+                            <p class="text-[9px] text-green-400 font-bold mb-1 tracking-wider uppercase">Média Confiança (68%)</p>
+                            <h4 class="font-ufc text-xl text-white italic">Michel Pereira</h4>
+                        </div>
+                        <div class="bg-white/10 p-2 rounded-full arrow-icon">
+                            <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                    <div class="details-content">
+                        <div class="bg-black/40 p-3 rounded-xl border border-white/10 mt-2">
+                            <p class="text-[11px] text-white/80">
+                                Diferença de precisão brutal (54% vs 41%). Pereira evoluiu no "fight IQ" e toma menos dano que o adversário.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item glass-card rounded-2xl p-4 cursor-pointer transition-all active:scale-95 hover:bg-white/5" onclick="toggleAccordion(this)">
+                    <div class="flex justify-between items-center">
+                        <div class="border-l-4 border-yellow-500 pl-3">
+                            <p class="text-[9px] text-yellow-500 font-bold mb-1 tracking-wider uppercase">Moderado (65%)</p>
+                            <h4 class="font-ufc text-xl text-white italic">Dan Ige</h4>
+                        </div>
+                        <div class="bg-white/10 p-2 rounded-full arrow-icon">
+                            <svg class="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                    <div class="details-content">
+                        <div class="bg-black/40 p-3 rounded-xl border border-white/10 mt-2">
+                            <p class="text-[11px] text-white/80">
+                                Ige tem defesa de quedas de 70%, anulando o jogo de chão de Melquizael e vencendo no boxe.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para os cards normais
+        function toggleAccordion(element) {
+            const isActive = element.classList.contains('active');
+            // Fecha todos
+            document.querySelectorAll('.accordion-item').forEach(item => item.classList.remove('active'));
+            // Abre se não estava ativo
+            if (!isActive) element.classList.add('active');
+        }
+
+        // Função exclusiva para o Main Event
+        function toggleMain(element) {
+            element.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
