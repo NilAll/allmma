@@ -2,33 +2,30 @@ name: Atualizador Automatico Nil All UFC
 
 on:
   schedule:
-    # O cron usa o padrão: Minuto Hora Dia Mes Dia_da_Semana
-    # '0 13 * * 3' significa: Toda Quarta-feira às 13:00 UTC (10:00 Horário de Brasília)
-    - cron: '0 13 * * 3' 
-  workflow_dispatch: # Isso cria um botão para você rodar o robô na hora que quiser
+    - cron: '0 13 * * 3' # Toda quarta-feira às 10h (Brasília)
+  workflow_dispatch: # Botão manual
 
 jobs:
   build:
-    runs-on: ubuntu-latest # O GitHub abre um computador Linux virtual para rodar seu script
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Garante permissão de escrita
     steps:
-      - name: Baixando os arquivos do seu repo
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Instalando o Python no Linux
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
-      - name: Instalando bibliotecas necessárias
-        run: pip install requests beautifulsoup4
-
-      - name: Executando o Robô Scraper
+      - name: Run scraper
         run: python scraper.py
 
-      - name: Salvando os novos dados no GitHub (Commit)
+      - name: Commit and Push
         run: |
-          git config --global user.name "Nil All Bot"
-          git config --global user.email "bot@nilall.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add lutas.json
-          git commit -m "UFC Data: Atualização Automática" || exit 0
+          git commit -m "Auto-update UFC stats" || echo "Sem mudanças"
           git push
